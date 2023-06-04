@@ -1,0 +1,210 @@
+[
+    {
+        "id": "d583f73bf099c5fb",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "09c20be884b2f1b2",
+        "type": "watson-speech-to-text",
+        "z": "d583f73bf099c5fb",
+        "name": "Speech to Text-mq",
+        "alternatives": 1,
+        "speakerlabels": true,
+        "smartformatting": false,
+        "lang": "en-US",
+        "langhidden": "en-US",
+        "langcustom": "NoCustomisationSetting",
+        "langcustomhidden": "NoCustomisationSetting",
+        "custom-weight": "0.5",
+        "band": "NarrowbandModel",
+        "bandhidden": "NarrowbandModel",
+        "keywords": "",
+        "keywords-threshold": "0.5",
+        "word-confidence": false,
+        "password": "",
+        "apikey": "PwbtNupJmC-ScmYniJjjZY6juMEGDNRVKcMJq0o2IlrQ",
+        "payload-response": false,
+        "streaming-mode": false,
+        "streaming-mute": true,
+        "auto-connect": false,
+        "discard-listening": false,
+        "disable-precheck": false,
+        "service-endpoint": "https://api.eu-gb.speech-to-text.watson.cloud.ibm.com/instances/6b7bfe0f-8094-4dab-9821-5b4a5f1df28b",
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "59f3a9c92bd27684",
+                "9cf533820145967b"
+            ]
+        ]
+    },
+    {
+        "id": "59f3a9c92bd27684",
+        "type": "debug",
+        "z": "d583f73bf099c5fb",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "22d4940d1e0bda27",
+        "type": "microphone",
+        "z": "d583f73bf099c5fb",
+        "name": "",
+        "x": 130,
+        "y": 60,
+        "wires": [
+            [
+                "09c20be884b2f1b2"
+            ]
+        ]
+    },
+    {
+        "id": "906052ae8f80cf28",
+        "type": "natural-language-understanding",
+        "z": "d583f73bf099c5fb",
+        "name": "Natural Language Understanding-en",
+        "categories": true,
+        "limitcategories": "3",
+        "classifications": false,
+        "classifications-model": "8",
+        "concepts": true,
+        "maxconcepts": "5",
+        "doc-emotion": false,
+        "doc-emotion-target": "",
+        "doc-sentiment": false,
+        "doc-sentiment-target": "",
+        "entity": true,
+        "entity-emotion": true,
+        "entity-sentiment": true,
+        "maxentities": "5",
+        "keyword": true,
+        "keyword-emotion": true,
+        "keyword-sentiment": true,
+        "maxkeywords": "5",
+        "metadata": false,
+        "relation": true,
+        "semantic": true,
+        "semantic-entities": false,
+        "semantic-keywords": false,
+        "maxsemantics": "50",
+        "limittextcharacters": "0",
+        "syntax": true,
+        "syntax-sentences": true,
+        "syntax-tokens-lemma": true,
+        "syntax-tokens-pos": true,
+        "service-endpoint": "https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/fdbda48d-3691-46e5-bf8a-99413b5f1651",
+        "x": 650,
+        "y": 180,
+        "wires": [
+            [
+                "f3151e644f43e1b0",
+                "149c06e9db5de60c"
+            ]
+        ]
+    },
+    {
+        "id": "f3151e644f43e1b0",
+        "type": "debug",
+        "z": "d583f73bf099c5fb",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "9cf533820145967b",
+        "type": "function",
+        "z": "d583f73bf099c5fb",
+        "name": "function 2",
+        "func": "msg.payload = msg.transcription;\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 180,
+        "wires": [
+            [
+                "906052ae8f80cf28",
+                "09e54eb7705d7f54"
+            ]
+        ]
+    },
+    {
+        "id": "09e54eb7705d7f54",
+        "type": "debug",
+        "z": "d583f73bf099c5fb",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "149c06e9db5de60c",
+        "type": "function",
+        "z": "d583f73bf099c5fb",
+        "name": "function 3",
+        "func": "const emailContent = `\nPayload: ${msg.payload}\nTranscription: ${msg.transcription}\nFull Result: ${JSON.stringify(msg.fullresult)}\nFeatures: ${JSON.stringify(msg.features)}\nUsage: ${JSON.stringify(msg.usage)}\nText Units: ${msg.text_units}\nText Characters: ${msg.text_characters}\nSyntax Features: ${JSON.stringify(msg.features.syntax)}\nTokens: ${JSON.stringify(msg.features.syntax.tokens)}\nSentences: ${JSON.stringify(msg.features.syntax.sentences)}\nSemantic Roles: ${JSON.stringify(msg.features.semantic_roles)}\nConcepts: ${JSON.stringify(msg.concepts)}\n`;\n\nmsg.payload = emailContent;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 180,
+        "wires": [
+            [
+                "a77471cfb988b12c"
+            ]
+        ]
+    },
+    {
+        "id": "a77471cfb988b12c",
+        "type": "e-mail",
+        "z": "d583f73bf099c5fb",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "authtype": "BASIC",
+        "saslformat": true,
+        "token": "oauth2Response.access_token",
+        "secure": true,
+        "tls": true,
+        "name": "johanjose503@gmail.com",
+        "dname": "",
+        "x": 970,
+        "y": 280,
+        "wires": []
+    }
+]
